@@ -1,0 +1,43 @@
+
+.image {
+  height: 120px;
+  width: 195px;
+}
+
+.image .img1 {
+  height: 121px;
+  left: 100px;
+  object-fit: cover;
+  position: fixed;
+  top: 8px;
+  width: 196px;
+}
+.label {
+    height: 79px;
+    width: 496px;
+  }
+  
+ .text-wrapper {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 70px;
+    font-weight: 700;
+    height: 79px;
+    left:340px;
+    letter-spacing: 0.7px;
+    line-height: normal;
+    position: fixed;
+    top: 50px;
+    white-space: nowrap;
+    width: 496px;
+  }
+  
+  .horizontal-line {
+    width: 100vw;
+    height: 3px;
+    background-color:black;
+    left: 0;
+    position: fixed;
+    top: 19.5%;
+  }
+  

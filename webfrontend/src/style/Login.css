@@ -1,0 +1,8 @@
+.image2 {
+    height: 75%;
+    right: 5%;
+    object-fit: cover;
+    position: absolute;
+    bottom: 5%;
+    width: 60%;
+}
