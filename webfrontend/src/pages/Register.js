@@ -17,7 +17,7 @@ import { FormControl,
 
 
          const Register = () =>{
-          console.log('Received Registration Data:', registrationData);
+
 
           const navigate = useNavigate();
           const [registrationData, setRegistrationData] = useState({
