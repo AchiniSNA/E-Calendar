@@ -55,7 +55,7 @@ const registerAccount = async (req, res) => {
     });
 
     await account.save();
-    res.status.json({ success: true, account });
+    res.status(200).json({ success: true, account });
   } catch (error) {
     console.error("Registration error:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
