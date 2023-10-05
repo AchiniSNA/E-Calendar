@@ -14,7 +14,7 @@ const getUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.json(user);
+    return res.status(200).json(user);
   } catch (error) {
     console.error("Error retrieving user:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -83,7 +83,7 @@ const loginAccount = async (req, res) => {
     // Password is correct, you can send the user data as a response
     res.status(200).json({ success: true, user });
   } catch (error) {
-    console.error("Error retrieving user:", error);
+    console.log("Error retrieving user:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -94,8 +94,29 @@ const checkUniqueUsername = async (req, res) => {
     const user = await User.findOne({ username });
     res.json({ isUnique: !user });
   } catch (error) {
-    console.error("Error checking username uniqueness:", error);
+    console.log("Error checking username uniqueness:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+const getAccountNumber = async (req, res) => {
+  const username = req.params.username;
+
+  try {
+    // Find the user by their username
+    const user = await User.findOne({ username }, "account_number -_id");
+
+    if (!user || user.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, accountNumber: user.account_number });
+  } catch (error) {
+    console.error("Error retrieving user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -104,4 +125,5 @@ module.exports = {
   getUser,
   loginAccount,
   checkUniqueUsername,
+  getAccountNumber,
 };

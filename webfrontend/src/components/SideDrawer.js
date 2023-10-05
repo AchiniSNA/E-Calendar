@@ -53,7 +53,7 @@ function SideDrawer({ isOpen, onClose }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCreateDialogClose}>Cancel</Button>
-          <Button variant="contained" onClick={handleCreateDialogClose}>
+          <Button  onClick={handleCreateDialogClose}>
             Create
           </Button>
         </DialogActions>

@@ -28,6 +28,7 @@ const SetPassword = () => {
   const location = useLocation();
 
   //  const [showModal, setShowModal] = useState(false);
+  const [isBoxOpen, setOpenBox] = useState(false);
   const [isPasswordMatch, setIsPasswordMatch] = useState(false);
   const [isUniqueUsername, setIsUniqueUsername] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +49,7 @@ const SetPassword = () => {
   const nicNo = registrationData.nicNo;
   const email = registrationData.email;
   const mobileNo = registrationData.mobileNo;
-  const [isBoxOpen, setOpenBox] = useState(false)
+ 
  
 
   
@@ -64,9 +65,10 @@ const SetPassword = () => {
       email: email,
     };
     try {
-       // const response = await AuthService.RegisterUser(userData);
-        const response = {status:200};
+        const response = await AuthService.RegisterUser(userData);
+        //const response = {status:200};
         if (response?.status === 200) {
+          console.log("hello1");
           // Successful registration
           setOpenBox(true);
         } else {
@@ -91,10 +93,11 @@ const SetPassword = () => {
     setIsLoading(true);
 
     try {
-        //const response = await AuthService.CheckUniqueUsername(text);
-        const response = {isUnique:true};
+        const response = await AuthService.CheckUniqueUsername(text);
+        //const response = {isUnique:true};
         setIsUniqueUsername(response.isUnique);
         setUsername(text);
+        console.log("hello2");
       } catch (error) {
         console.error("Error checking username uniqueness:", error);
         setIsUniqueUsername(false);
@@ -151,13 +154,15 @@ const SetPassword = () => {
                             <Typography variant="subtitle1" >Username</Typography>
                             
                             <Grid xs={12} sm={6} item>
-                                <TextField type="text" onChange ={(e) => checkUniqueUsername(e.target.value)} disabled={isLoading} required size="small"/>
+                            
+                                <TextField type="text" onChange ={(e) => checkUniqueUsername(e.target.value)}  required size="small"/>
                                 {isLoading ? (
-                                    <div className="spinner">Loading...</div>
+                                  <div className="spinner"></div>
+                              //     {/* <div className="spinner">Loading...</div> */} 
                                 ) : isUniqueUsername ? (
                                     <CheckCircleIcon/>
                                 ) : null}
-                            </Grid>
+                                </Grid>                                 
                             
                             <Typography variant="subtitle1" >Password</Typography>
                             
@@ -170,7 +175,7 @@ const SetPassword = () => {
                             <Typography variant="subtitle1" >Confirm Password</Typography>
 
                             <Grid xs={12} sm={6} item>
-                                <TextField type ="password" onChangeText={(e) => checkPasswordMatch(password, e.target.value)} required size="small"/>
+                                <TextField type ="password" onChange={(e) => checkPasswordMatch(password, e.target.value)} required size="small"/>
                                 {isLoading1 ? (
                                     <div className="spinner">Loading...</div>
                                 ) : isPasswordMatch ? (
@@ -207,8 +212,7 @@ const SetPassword = () => {
 
 
 
-       <Dialog  open={isBoxOpen}
-                onClose= {()=>setOpenBox(false)}>
+       <Dialog  open={isBoxOpen} onClose= {()=>setOpenBox(false)}>
                  
                 <Typography variant="h5"><TaskAltIcon  fontSize="large"/>  Registration completed</Typography>
                 
@@ -239,3 +243,175 @@ const SetPassword = () => {
 };
 
 export default SetPassword;
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+{/*
+
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import axios from "axios";
+import "../style/Setpassword.css";
+import "../style/Style.css";
+import { FormControl,
+         Grid,
+         Card,
+         CardContent,
+         Paper,
+         Typography,
+         TextField,
+         Button,
+         Dialog, 
+         DialogActions, 
+         DialogContent,
+         DialogContentText} from '@mui/material';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+
+function SetPassword () {
+
+  const [username,setUserName]=useState('')
+  const [password,setPassword]=useState('')
+  const [confirm,setConfirm]=useState('')
+  const [isBoxOpen, setOpenBox] = useState(false)
+  
+  
+  const navigate=useNavigate();
+    
+    function handleSubmit(event) {
+        event.preventDefault();
+    
+      }
+      function handleClick(event){
+        window.location.href='/';
+      }
+  
+
+  return (
+    <div className="setPassword">
+        <div className="image">
+            <img className="img1" alt="" src="./BOC.jpeg" />
+        </div>
+        
+        <div className="label">
+            <div className="text-wrapper">CALENDAR</div>
+        </div>
+        
+        <div className = "horizontal-line" > </div> 
+
+
+
+
+        <Paper style={{  background: '#ffe795',width:'100vw'}}>
+            <Card style={{maxWidth:450, margin:"auto", borderRadius:20,padding:"0px 20px"}}>
+ 
+                <CardContent>
+                
+                    <FormControl>
+                    
+                    
+                        <form onSubmit={handleSubmit}>
+                        
+                        <img className="img3" src = "./lock.png" alt="" style={{height:220, width:220, padding:"0px 90px"}} />  
+                            
+                            <Typography variant="subtitle1" >Username</Typography>
+                            
+                            <Grid xs={12} sm={6} item>
+                                <TextField type="text" onChange ={(e) => {setUserName(e.target.value)}}  id="username" required size="small"/>
+                            </Grid>
+                            
+                            <Typography variant="subtitle1" >Password</Typography>
+                            
+                            <Grid xs={12} sm={6} item>
+                                <TextField type ="password" onChange ={(e) => {setPassword(e.target.value)}}  id="password" required size="small"/>
+                            </Grid>
+
+                            <Typography variant="subtitle1" >Confirm Password</Typography>
+
+                            <Grid xs={12} sm={6} item>
+                                <TextField type ="password" onChange ={(e) => {setConfirm(e.target.value)}}  id="confirm" required size="small"/>
+                            </Grid>
+
+              
+                            <Button type="submit"  onClick={() => setOpenBox(true)} style = {{
+                                                            backgroundColor:"#fcc507ab",
+                                                            fontSize: "32px",
+                                                            margin:"42px",
+                                                            width:"315px",
+                                                            height: "50px",
+                                                            color: "#000000",
+                                                            alignItems:"center",
+                                                            borderRadius:"20px",
+                                                           
+                                                          }}>REGISTER</Button>
+                            
+                           
+                                      
+                        </form> 
+                        
+                    </FormControl>
+                
+                </CardContent>
+        
+            </Card>
+           
+       </Paper> 
+
+
+
+       <Dialog  open={isBoxOpen}
+                onClose= {()=>setOpenBox(false)}>
+                 
+                <Typography variant="h5"><TaskAltIcon  fontSize="large"/>  Registration completed</Typography>
+                
+                <DialogContent>
+                    <DialogContentText variant="h6" style={{ padding:"0px 40px"}}>Manage Your Life with </DialogContentText>
+                    <DialogContentText  variant="h5" style={{ padding:"0px 60px"}}>BOC Calendar</DialogContentText>
+                    <CalendarMonthOutlinedIcon sx={{ fontSize: 60 }} style={{ padding:"25px 120px"}}/>
+                    <DialogActions >
+                        <Button onClick={handleClick} style = {{
+                                                            backgroundColor:"#fcc507ab",
+                                                            fontSize: "15px",
+                                                            margin:"10px",
+                                                            width:"90px",
+                                                            height: "50px",
+                                                            color: "#000000",
+                                                            borderColor:"black",
+                                                            borderRadius:"10px",
+                                                           
+                                                          }}>Got it</Button>
+                    </DialogActions>
+                </DialogContent>
+        </Dialog>                        
+
+    </div>
+    
+  );
+};
+
+export default SetPassword;
+
+
+*/}
+
+
+
+
+
+
+  

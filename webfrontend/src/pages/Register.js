@@ -17,7 +17,7 @@ import { FormControl,
 
 
          const Register = () =>{
-
+         // console.log('Received Registration Data:', registrationData);
 
           const navigate = useNavigate();
           const [registrationData, setRegistrationData] = useState({
@@ -54,7 +54,7 @@ import { FormControl,
             // Check if email is valid before navigating
             if (isEmailValid) {
               console.log(registrationData);
-              navigate('/setPassword', { registrationData: registrationData });
+              navigate('/setPassword', {state:{ registrationData: registrationData} });
 
               //navigate('/setPassword',{state: {registrationData}});
               // Add your navigation logic here or render the next component

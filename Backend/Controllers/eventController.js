@@ -93,9 +93,34 @@ const deleteEvent = async(req,res)=>{
   }
 }
 
+
+//find all the events in a certain day when the date is given
+
+
+const getEventsByDate= async(req, res) =>{
+  const checkDate=req.params.checkDate;
+
+  try {
+    const dates = await Event.find({ date: checkDate });
+    const titles = dates.map(doc => doc.title);
+    if (!titles) {
+      return res.status(404).json({ message: 'no events not found' });
+    }
+    return res.json(titles);
+
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+
+
+
+
   module.exports = {
     getEvent,
     createEvent,
     deleteEvent,
     updateEvent,
+    getEventsByDate
 }

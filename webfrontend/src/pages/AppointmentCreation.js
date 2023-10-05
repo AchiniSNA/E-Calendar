@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import {
   Dialog,
   DialogTitle,
@@ -36,6 +36,17 @@ export default function AppointmentCreation({ open, onClose, onSaveAppointment, 
 
   const [selectedColor, setSelectedColor] = useState(defaultColor);
 
+  useEffect(() => {
+    setAppointmentData((prevAppointmentData) => ({
+      ...prevAppointmentData,
+      start: selectedSlot ? selectedSlot.start : null,
+      end: selectedSlot ? selectedSlot.end : null,
+    }));
+  }, [selectedSlot]);
+
+
+
+
   const handleSaveAppointment = () => {
     if (appointmentData.title) {
       const selectedReminders = Object.keys(reminders).filter(
@@ -63,6 +74,8 @@ export default function AppointmentCreation({ open, onClose, onSaveAppointment, 
         start: null,
         end: null,
       });
+
+      console.log(appointmentData);
 
       setReminders({
         "15": false,

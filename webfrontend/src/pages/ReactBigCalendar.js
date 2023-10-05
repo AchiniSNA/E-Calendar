@@ -63,6 +63,7 @@ export default function ReactBigCalendar() {
         style={{ height: "95vh" }}
         onSelectSlot={handleSelect}
         eventPropGetter={eventPropGetter} // Apply event colors
+        
       />
       <Popover
         open={Boolean(anchorEl)}
@@ -107,9 +108,11 @@ export default function ReactBigCalendar() {
           open={Boolean(selectedOption)}
           onClose={handleCloseMenu}
           onSaveAppointment={(newAppointment) => {
+            
             setSelectedSlot(null);
           }}
           selectedSlot={selectedSlot}
+          eventPropGetter={eventPropGetter}
         />
       )}
       {selectedOption === "reminders" && (

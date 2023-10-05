@@ -87,9 +87,9 @@ function ProfileMenu() {
         <DialogContent>
             {/*Fetch data - UserName, Account No,email address*/}
             {/*Dummy data*/}
-         <Typography variant="body1">User's Name:John</Typography> 
-         <Typography variant="body1">User's Account No.:334578 </Typography>
-          <Typography variant="body1">User's Email: john.doe@example.com</Typography>
+         <Typography variant="body1">User's Name : Achini Sanjula</Typography> 
+         <Typography variant="body1">User's Account No. : 334578 </Typography>
+          
           
         </DialogContent>
         <DialogActions>

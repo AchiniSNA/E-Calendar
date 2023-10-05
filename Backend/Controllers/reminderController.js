@@ -85,9 +85,43 @@ const deleteReminder = async(req,res)=>{
     }
   }
 
+
+
+//find all the reminders in a certain day when the date is given
+
+const getRemindersByDate= async (req, res) => {
+  const { date } = req.params;
+
+  // Assuming date is in format 'YYYY-MM-DD'
+  const startDate = new Date(date);
+  const endDate = new Date(new Date(startDate).setDate(startDate.getDate() + 1));
+
+  try {
+    const events = await Reminder.find(
+      {
+        date: {
+          $gte: startDate,
+          $lt: endDate,
+        },
+      },
+      { title: 1, _id: 0 } // Project only the 'title' field, exclude '_id'
+    );
+
+    const reminderTitles = events.map((reminder) => reminder.title);
+   
+
+
+    res.json(reminderTitles);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+;  
+
 module.exports = {
     createReminder,
     deleteReminder,
     getReminder,
     editReminder,
+    getRemindersByDate
 }

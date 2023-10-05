@@ -213,6 +213,33 @@ const reminderController = require("../Controllers/reminderController");
  *         description: Event not found.
  *       500:
  *         description: Internal server error occurred.
+ * /event/getEventsByDate/{date}:
+ *   get:
+ *     tags:
+ *       - event
+ *     summary: Get events by date
+ *     description: Retrieve events from the database for a specific date.
+ *     operationId: getEventsByDate
+ *     parameters:
+ *       - name: date
+ *         in: path
+ *         description: The date in 'YYYY-MM-DD' format
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Events retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ *       404:
+ *         description: No events found for this date.
+ *       500:
+ *         description: Internal server error occurred.
  * /user/registerAccount:
  *   post:
  *     tags:
@@ -395,6 +422,33 @@ const reminderController = require("../Controllers/reminderController");
  *         description: Reminder not found.
  *       500:
  *         description: Internal server error occurred.
+ * /reminder/getRemindersByDate/{date}:
+ *   get:
+ *     tags:
+ *       - reminder
+ *     summary: Get reminders by date
+ *     description: Retrieve reminders from the database for a specific date.
+ *     operationId: getRemindersByDate
+ *     parameters:
+ *       - name: date
+ *         in: path
+ *         description: The date in 'YYYY-MM-DD' format
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Reminders retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ *       404:
+ *         description: No reminders found for this date.
+ *       500:
+ *         description: Internal server error occurred.
  * /appointment/getAppointment/{appointment_id}:
  *   get:
  *     tags:
@@ -564,6 +618,36 @@ const reminderController = require("../Controllers/reminderController");
  *         description: No calendars found for this user.
  *       500:
  *         description: Internal server error occurred.
+ * /user/getAccountNumber/{username}:
+ *   get:
+ *     tags:
+ *       - user
+ *     summary: Get user's account number
+ *     description: Retrieve the account number associated with a specific user.
+ *     operationId: getAccountNumber
+ *     parameters:
+ *       - name: username
+ *         in: path
+ *         description: The username of the user to retrieve the account number for
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User's account number retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 accountNumber:
+ *                   type: string
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error occurred.
  */
 router.get("/event/getEvent/:event_id", eventController.getEvent);
 router.get("/user/getUser/:username", userController.getUser);
@@ -613,4 +697,11 @@ router.get(
 );
 
 router.post("/user/checkUniqueUsername", userController.checkUniqueUsername);
+
+router.get("/event/getEventsByDate/:date", eventController.getEventsByDate);
+router.get(
+  "/reminder/getRemindersByDate/:date",
+  reminderController.getRemindersByDate
+);
+router.get("/user/getAccountNumber/:username", userController.getAccountNumber);
 module.exports = router;

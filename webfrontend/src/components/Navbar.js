@@ -33,8 +33,9 @@ function Navbar() {
         <Typography variant='h4' component='div' sx={{flexGrow:1}} color={'black'} letterSpacing={2}> CALENDAR</Typography>
         
         
-       <Stack direction={'row'} spacing={5}>
-          <SearchIcon fontSize="large" sx={{ color: blueGrey[500] }} />
+       <Stack direction={'row'}  alignItems="center" spacing={5}>
+        {/*  <SearchIcon fontSize="large" sx={{ color: blueGrey[500] }} /> */}
+        <SearchIcon fontSize="large" sx={{ color: blueGrey[500] }} />
          
          {/* <AccountCircleIcon fontSize="large" sx={{ color: blueGrey[500] }} />  */}
         {/* Render the ProfileMenu component */}
