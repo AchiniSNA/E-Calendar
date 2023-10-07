@@ -1,5 +1,6 @@
 import { baseUrl } from "./client";
 import axios from "axios";
+import client from "./client";
 
 const APIEndpoint = "http://localhost:8000/";
 
@@ -68,8 +69,22 @@ const CheckUniqueUsername = (username) =>
       });
   });
 
+const GetAccountNumber = async (username) =>{
+    const res = await client.get(baseUrl+'/user/getAccountNumber/'+username);
+    console.log("hello");
+    // console.log(res);
+    if(res?.data?.success){
+        return(res.data);
+    }else{
+        return(res.data.message);
+    }
+
+
+
+
 export default{
   LoginUser,
   RegisterUser,
   CheckUniqueUsername,
+  GetAccountNumber,
 }
