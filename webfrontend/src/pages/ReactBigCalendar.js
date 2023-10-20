@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import events from "./events";
+//import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import EventCreation from "./EventCreation";
 import AppointmentCreation from "./AppointmentCreation";
@@ -12,7 +12,8 @@ moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
 
 export default function ReactBigCalendar() {
-  const [eventsData, setEventsData] = useState(events);
+  const [eventsData, setEventsData] = useState([]);
+  const [appointmentsData, setAppointmentsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -21,7 +22,7 @@ export default function ReactBigCalendar() {
 
   const eventPropGetter = (event, start, end, isSelected) => {
     // Check if the event has a color property; if not, use a default color
-    const color = event.color || "#FF0000";
+    const color = event.color || "#AA0011";
 
     return {
       style: {
@@ -30,6 +31,7 @@ export default function ReactBigCalendar() {
     };
   };
 
+  
   const handleSelect = ({ start, end }) => {
     // Check if a valid time slot is selected
   
@@ -63,7 +65,7 @@ export default function ReactBigCalendar() {
         style={{ height: "95vh" }}
         onSelectSlot={handleSelect}
         eventPropGetter={eventPropGetter} // Apply event colors
-        
+        //appointmentPropGetter={appointmentPropGetter}
       />
       <Popover
         open={Boolean(anchorEl)}
@@ -99,6 +101,7 @@ export default function ReactBigCalendar() {
             setSelectedSlot(null);
           }}
           selectedSlot={selectedSlot}
+      //    eventPropGetter={eventPropGetter}
     //      selectedStartTime={selectedSlot?  selectedSlot.start : null}
     //      selectedEndTime={selectedSlot? selectedSlot.end : null}
         />
@@ -108,11 +111,12 @@ export default function ReactBigCalendar() {
           open={Boolean(selectedOption)}
           onClose={handleCloseMenu}
           onSaveAppointment={(newAppointment) => {
-            
+            setEventsData([...eventsData, newAppointment]);
+            console.log(newAppointment);
             setSelectedSlot(null);
           }}
           selectedSlot={selectedSlot}
-          eventPropGetter={eventPropGetter}
+          
         />
       )}
       {selectedOption === "reminders" && (
@@ -124,12 +128,12 @@ export default function ReactBigCalendar() {
             setSelectedSlot(null);
           }}
           selectedStartTime={selectedSlot.start} // Pass the start time
+          
         />
       )}
     </div>
   );
 }
-
 
 
 
