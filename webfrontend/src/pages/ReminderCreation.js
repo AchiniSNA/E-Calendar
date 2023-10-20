@@ -45,19 +45,6 @@ export default function ReminderCreation({
     }
   };
 
-  const colorOptions = [
-    "#FF0000",
-    "#FFA500",
-    "#FFFF00",
-    "#008000",
-    "#0000FF",
-    "#800080",
-    "#FF00FF",
-    "#00FFFF",
-    "#808080",
-    "#000000",
-  ];
-
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Create Reminder</DialogTitle>
