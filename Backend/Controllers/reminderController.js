@@ -20,7 +20,8 @@ const createReminder = async(req,res)=>{
         description:req.body.description ,
         recurring: req.body.recurring,
         time_zone: req.body.time_zone,
-        time: req.body.time
+        time: req.body.time,
+        username: req.body.username,
     });
     await reminder.save();
     res.send(reminder);
@@ -115,13 +116,29 @@ const getRemindersByDate= async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};  
+
+const getAllRemindersForUser = async (req, res) => {
+  const {username} = req.params; //pass the username as a parameter
+
+  try{
+    const reminders= await Reminder.find({username: username});
+    if (!reminders || reminders.length === 0) {
+      return res.status(404).json({success:false, message: 'Reminder not found' });
+    }
+    else{
+    return res.status(200).json({success:true,reminders});
+    }
+  }catch(error){
+    res.status(500).json({success: false, error:'Internal Server Error'});
+  } 
 }
-;  
 
 module.exports = {
     createReminder,
     deleteReminder,
     getReminder,
     editReminder,
-    getRemindersByDate
+    getRemindersByDate,
+    getAllRemindersForUser
 }
