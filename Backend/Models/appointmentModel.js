@@ -7,7 +7,7 @@ const appointmentSchema = new mongoose.Schema({
       required: [true, "calendar id is Required"],
     },
     calendar_id: {
-        type: String,
+        type: Array,
         required: [true, "calendar id is Required"],
     },
     title:{
@@ -38,6 +38,10 @@ const appointmentSchema = new mongoose.Schema({
         type: String,
         required: [false, "icon is not required"],
     },
+    username: {
+        type: String,
+        required: [true, "username is Required"],
+    },
     Synchronize:{
         type: Array,
         required: [false, "synchronize is not required"],
@@ -46,9 +50,13 @@ const appointmentSchema = new mongoose.Schema({
         type: String,
         required: [false, "timeZone is not required"],
     },
-    time:{
+    startTime:{
         type: String,
-        required: [true, "time is required"],
+        required: [true, "Starting time is required"],
+    },
+    finishTime:{
+        type: String,
+        required: [true, "Finishing time is required"],
     },
   });
   
