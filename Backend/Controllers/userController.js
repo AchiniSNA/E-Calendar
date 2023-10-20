@@ -1,7 +1,10 @@
 const validate = require("../Models/userModel");
 const userModel = require("../Models/userModel");
 const User = require("../Models/userModel");
+const Calendar = require("../Models/calendarModel");
 const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require("uuid");
+
 
 const getUser = async (req, res) => {
   const username = req.params.username;
@@ -55,7 +58,17 @@ const registerAccount = async (req, res) => {
     });
 
     await account.save();
-    res.status(200).json({ success: true, account });
+    const calendarId = uuidv4();
+    const calendar = new Calendar({
+      calendar_id: calendarId,
+      username: req.body.username,
+      account_number: req.body.account_number,
+      access: req.body.access, // You need to specify how you want to set this
+      name: req.body.username,
+    });
+
+    await calendar.save();
+    res.status(200).json({ success: true, account ,calendar });
   } catch (error) {
     console.error("Registration error:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
