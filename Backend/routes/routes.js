@@ -38,7 +38,7 @@ const reminderController = require("../Controllers/reminderController");
  *          event:
  *              properties:
  *                  calendar_id:
- *                      type : 'string'
+ *                      type : "array"
  *                  username:
  *                      type : 'string'
  *                  title:
@@ -59,7 +59,11 @@ const reminderController = require("../Controllers/reminderController");
  *                      type: 'array'
  *                  time_zone:
  *                      type: 'string'
- *                  time:
+ *                  startTime:
+ *                      type: 'string'
+ *                  finishTime:
+ *                      type: 'string'
+ *                  color:
  *                      type: 'string'
  *          reminder:
  *              properties:
@@ -77,10 +81,12 @@ const reminderController = require("../Controllers/reminderController");
  *                      type: 'string'
  *                  time:
  *                      type: 'string'
+ *                  username:
+ *                      type: 'string'
  *          appointment:
  *              properties:
  *                  calendar_id:
- *                      type : 'string'
+ *                      type : 'array'
  *                  title:
  *                      type : 'string'
  *                  date:
@@ -99,7 +105,13 @@ const reminderController = require("../Controllers/reminderController");
  *                      type: 'array'
  *                  time_zone:
  *                      type: 'string'
- *                  time:
+ *                  startTime:
+ *                      type: 'string'
+ *                  finishTime:
+ *                      type: 'string'
+ *                  username:
+ *                      type: 'string'
+ *                  color:
  *                      type: 'string'
  *          calendar:
  *              properties:
@@ -147,25 +159,30 @@ const reminderController = require("../Controllers/reminderController");
  *         description: Event not found.
  *       500:
  *         description: Internal server error occurred.
- * /event/createEvent:
+* /event/createEvent:
  *   post:
- *      tags:
- *          - event
- *      summary: Insert new event
- *      description: This api is use to insert a new event into the database
- *      requestBody:
- *          description: Create a new event in the database
- *          content:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/event'
- *      responses:
- *          200:
- *              description: Successful.
- *          400:
- *              description: content can not be empty.
- *          500:
- *              description: error while creating the model.
+ *     tags:
+ *       - event
+ *     summary: Create a new event
+ *     description: Create a new event and save it in the database.
+ *     operationId: createEvent
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/event'
+ *     responses:
+ *       200:
+ *         description: Event created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/event'
+ *       400:
+ *         description: Bad request. Validation error in the request body.
+ *       500:
+ *         description: Internal server error occurred.
  * /event/updateEvent/{event_id}:
  *   put:
  *      tags:
@@ -648,6 +665,300 @@ const reminderController = require("../Controllers/reminderController");
  *         description: User not found.
  *       500:
  *         description: Internal server error occurred.
+* /event/getAllEventsForUser/{username}:
+ *   get:
+ *     tags:
+ *       - event
+ *     summary: Get all events for a user
+ *     description: Retrieve all events associated with a specific user.
+ *     operationId: getAllEventsForUser
+ *     parameters:
+ *       - name: username
+ *         in: path
+ *         description: The username of the user to retrieve events for
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Events retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 events:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/event'
+ *       404:
+ *         description: No events found for this user.
+ *       500:
+ *         description: Internal server error occurred.
+ * /reminder/getAllRemindersForUser/{username}:
+ *   get:
+ *     tags:
+ *       - reminder
+ *     summary: Get all reminders for a user
+ *     description: Retrieve all reminders associated with a specific user.
+ *     operationId: getAllRemindersForUser
+ *     parameters:
+ *       - name: username
+ *         in: path
+ *         description: The username of the user to retrieve reminders for
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Reminders retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 reminders:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/reminder'
+ *       404:
+ *         description: No reminders found for this user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal server error occurred.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ * 
+ * /appointment/getAllAppointmentsForUser/{username}:
+ *   get:
+ *     tags:
+ *       - appointment
+ *     summary: Get all appointments for a user
+ *     description: Retrieve all appointments associated with a specific user.
+ *     operationId: getAllAppointmentsForUser
+ *     parameters:
+ *       - name: username
+ *         in: path
+ *         description: The username of the user to retrieve appointments for
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Appointments retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 appointments:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/appointment'
+ *       404:
+ *         description: No appointments found for this user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal server error occurred.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ * /user/{username}/events/{date}:
+ *   get:
+ *     tags:
+ *       - event
+ *     summary: Get events for a user by date
+ *     description: Retrieve events associated with a specific user for a given date.
+ *     operationId: getEventsForUserByDate
+ *     parameters:
+ *       - name: username
+ *         in: path
+ *         description: The username of the user to retrieve events for
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: date
+ *         in: path
+ *         description:The date for which to retrieve events (format: YYYY-MM-DD)
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *     responses:
+ *       200:
+ *         description: Events retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/event'
+ *       500:
+ *         description: Internal server error occurred.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ * /event/getEventsByCalendarIds:
+ *   get:
+ *     tags:
+ *       - event
+ *     summary: Get events by calendar IDs
+ *     description: Retrieve events associated with specific calendar IDs.
+ *     operationId: getEventsByCalendarIds
+ *     parameters:
+ *       - in: query
+ *         name: calendarIds
+ *         description: Comma-separated list of calendar IDs
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Events retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 events:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/event'
+ *       400:
+ *         description: Bad request. Missing or invalid calendarIds parameter.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: No events found for the provided calendar IDs.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal server error occurred.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ * /appointment/getAppointmentsByCalendarIds:
+ *   get:
+ *     tags:
+ *       - appointment
+ *     summary: Get appointments by calendar IDs
+ *     description: Retrieve appointments associated with specific calendar IDs.
+ *     operationId: getAppointmentsByCalendarIds
+ *     parameters:
+ *       - in: query
+ *         name: calendarIds
+ *         description: Comma-separated list of calendar IDs
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Appointments retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 appointments:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/appointment'
+ *       400:
+ *         description: Bad request. Missing or invalid calendarIds parameter.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: No appointments found for the provided calendar IDs.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal server error occurred.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
  */
 router.get("/event/getEvent/:event_id", eventController.getEvent);
 router.get("/user/getUser/:username", userController.getUser);
@@ -704,4 +1015,17 @@ router.get(
   reminderController.getRemindersByDate
 );
 router.get("/user/getAccountNumber/:username", userController.getAccountNumber);
+
+router.get('/event/getAllEventsForUser/:username', eventController.getAllEventsForUser);
+
+router.get('/reminder/getAllRemindersForUser/:username', reminderController.getAllRemindersForUser);
+
+router.get('/appointment/getAllAppointmentsForUser/:username', appointmentController.getAllAppointmentsForUser);
+
+router.get('/user/:username/events/:date', eventController.getEventsForUserByDate);
+
+router.get('/event/getEventsByCalendarIds', eventController.getEventsByCalendarIds);
+
+router.get('/appointment/getAppointmentsByCalendarIds', appointmentController.getAppointmentsByCalendarIds);
+
 module.exports = router;
