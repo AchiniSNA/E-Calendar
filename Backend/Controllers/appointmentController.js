@@ -5,7 +5,7 @@ const createAppointment = async(req,res)=>{
     console.log("creating new Appointment",req.body);
     //validate request
     if(!req.body){
-        res.status(400).json({
+        res.status(400).json({ success: false, 
             message: "content can not be empty"
         });
     }
@@ -23,10 +23,13 @@ const createAppointment = async(req,res)=>{
         icon:req.body.icon,
         Synchronize: req.body.Synchronize,
         time_zone: req.body.time_zone,
-        time: req.body.time
+        startTime: req.body.startTime,
+        finishTime: req.body.finishTime,
+        username: req.body.username,
+        color:req.body.color, 
     });
     await appointment.save();
-    res.send(appointment);
+    res.status(200).send({success:true, message: 'Appointment saved successfully',appointment});
 }
 
 // Edit an existing appointment by appointment_id
@@ -43,13 +46,13 @@ const editAppointment = async (req, res) => {
     );
 
     if (!updatedAppointment) {
-      return res.status(404).json({ message: 'Appointment not found' });
+      return res.status(404).json({ success: false, message: 'Appointment not found' });
     }
 
-    res.status(200).json(updatedAppointment);
+    res.status(200).json({success:true, updatedAppointment});
   } catch (error) {
     console.error('Error editing appointment:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ success: true, message: 'Internal Server Error' });
   }
 };
 
@@ -77,20 +80,66 @@ const deleteAppointment = async(req,res)=>{
       // Find and delete the appointment by its appointment_id
       const deletedAppointment = await Appointment.findOneAndDelete({ appointment_id: appointmentId });
       if (!deletedAppointment) {
-        return res.status(404).json({ message: 'Appointment not found' });
+        return res.status(404).json({ success: false, message: 'Appointment not found' });
       }
   
-      return res.json({ message: 'Appointment deleted successfully' });
+      return res.status(200).json({ success: true, message: 'Appointment deleted successfully' });
     } catch (error) {
       console.error('Error deleting Appointment:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
+      res.status(500).json({success:false,  message: 'Internal Server Error' });
     }
   }
 
+
+const getAllAppointmentsForUser = async (req, res) => {
+  const {username} = req.params; //pass the username as a parameter
+
+  try{
+    const appointments= await Reminder.find({username: username});
+    if (!appointments || appointments.length === 0) {
+      return res.status(404).json({success:false, message: 'Appointment not found' });
+    }
+    else{
+    return res.status(200).json({success:true,reminders});
+    }
+  }catch(error){
+    res.status(500).json({success: false, error:'Internal Server Error'});
+  } 
+}
+
+const getAppointmentsByCalendarIds = async (req, res) => {
+  try {
+    const { calendarIds } = req.query; // Extract calendarIds from query parameters
+
+    if (!calendarIds) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing calendarIds parameter" });
+    }
+
+    // Split the comma-separated calendarIds string into an array
+    const calendarIdArray = calendarIds.split(',');
+
+    // Use the Event model to find appointments with matching calendar IDs
+    const appointments = await Appointment.find({ calendar_id: { $in: calendarIdArray } });
+
+    if (!appointments || appointments.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Event not found" });
+    } else {
+      res.status(200).json({ success: true, appointments });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+};
 
 module.exports={
     createAppointment,
     deleteAppointment,
     getAppointment,
     editAppointment,
+    getAllAppointmentsForUser,
+    getAppointmentsByCalendarIds
 }
