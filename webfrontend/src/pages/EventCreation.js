@@ -81,7 +81,13 @@ export default function EventCreation({
         endTime: null,
       });
 
-      console.log(eventData);
+      //const onCancel = () => {
+        // You can add any logic here to handle canceling the event creation
+        // For example, you might want to reset the form fields or simply close the dialog
+      //  onClose(); // Close the dialog when "Cancel" is clicked
+      //};
+
+      console.log(eventData,"eventcreation athule");
 
       setReminders({
         "15": false,
@@ -138,101 +144,130 @@ export default function EventCreation({
         
 
 <Typography variant="subtitle1">Start Time:</Typography>
-        <Typography variant="subtitle2">
-          {eventData.start ? eventData.start.toString() : "N/A"}
-        </Typography>
+  <Typography variant="subtitle2"> {eventData.start ? eventData.start.toString() : "N/A"} </Typography>
 
-        <Typography variant="subtitle1">End Time:</Typography>
-        <Typography variant="subtitle2">
-          {eventData.end ? eventData.end.toString() : "N/A"}
-        </Typography>
+<Typography variant="subtitle1">End Time:</Typography>
+  <Typography variant="subtitle2"> {eventData.end ? eventData.end.toString() : "N/A"} </Typography>
+        
 
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Event Color</InputLabel>
-          <Select
-            value={selectedColor}
-            onChange={(e) => setSelectedColor(e.target.value)}
-          >
-            {colorOptions.map((color, index) => (
-              <MenuItem key={index} value={color}>
-                <Box
-                  component="span"
-                  sx={{
-                    width: "20px",
-                    height: "20px",
-                    display: "inline-block",
-                    backgroundColor: color,
-                    marginRight: "10px",
-                    border: "1px solid #ccc",
-                    borderRadius: "50%",
-                  }}
-                />
-                Color {index + 1}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Recurrence</InputLabel>
-          <Select
-            value={eventData.recurrence}
-            onChange={(e) =>
-              setEventData({ ...eventData, recurrence: e.target.value })
-            }
-          >
-            <MenuItem value="none">None</MenuItem>
-            <MenuItem value="daily">Daily</MenuItem>
-            <MenuItem value="weekly">Weekly</MenuItem>
-            <MenuItem value="monthly">Monthly</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Time Zone</InputLabel>
-          <Select
-            value={eventData.timeZone}
-            onChange={(e) =>
-              setEventData({ ...eventData, timeZone: e.target.value })
-            }
-          >
-            <MenuItem value="auto">Auto (Detect Time Zone)</MenuItem>
-            <MenuItem value="GMT">GMT</MenuItem>
-            <MenuItem value="PST">PST (Pacific Standard Time)</MenuItem>
-          </Select>
-        </FormControl>
-        <Typography variant="subtitle1">Reminders</Typography>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={reminders["15"]}
-                onChange={handleReminderChange("15")}
+{/*selecting event colour*/}
+   <FormControl fullWidth margin="normal">
+     <InputLabel htmlFor="event-color">Event Color</InputLabel>
+        <Select
+          value={selectedColor}
+          onChange={(e) => setSelectedColor(e.target.value)}
+          label="Event Color"
+          variant="outlined"
+          inputProps={{
+            name: "event-color",
+            id: "event-color",
+          }}
+        >
+          {colorOptions.map((color, index) => (
+            <MenuItem key={index} value={color}>
+              <Box
+                component="span"
+                sx={{
+                  width: "20px",
+                  height: "20px",
+                  display: "inline-block",
+                  backgroundColor: color,
+                  marginRight: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "50%",
+                }}
               />
-            }
+              Color {index + 1}
+            </MenuItem>
+          ))}
+        </Select>
+    </FormControl>
+
+
+<FormControl fullWidth margin="normal">
+  <InputLabel htmlFor="recurrence">Recurrence</InputLabel>
+    <Select
+      value={eventData.recurrence}
+      onChange={(e) =>
+        setEventData({ ...eventData, recurrence: e.target.value })
+      }
+      label="Recurrence"
+      variant="outlined"
+      inputProps={{
+        name: "recurrence",
+        id: "recurrence",
+      }}
+    >
+      <MenuItem value="none">None</MenuItem>
+      <MenuItem value="daily">Daily</MenuItem>
+      <MenuItem value="weekly">Weekly</MenuItem>
+      <MenuItem value="monthly">Monthly</MenuItem>
+    </Select>
+</FormControl>
+
+
+
+<FormControl fullWidth margin="normal">
+  <InputLabel htmlFor="timeZone">Time Zone</InputLabel>
+  <Select
+    value={eventData.timeZone}
+    onChange={(e) =>
+      setEventData({ ...eventData, timeZone: e.target.value })
+    }
+    label="Time Zone"
+    variant="outlined"
+    inputProps={{
+      name: "timeZone",
+      id: "timeZone",
+    }}
+  >
+    <MenuItem value="auto">Auto (Detect Time Zone)</MenuItem>
+    <MenuItem value="GMT">GMT</MenuItem>
+    <MenuItem value="PST">PST (Pacific Standard Time)</MenuItem>
+  </Select>
+</FormControl>
+
+
+
+  <Typography variant="subtitle1">Reminders</Typography>
+    <FormGroup>
+      <FormControlLabel
+         control={
+          <Checkbox
+          checked={reminders["15"]}
+          onChange={handleReminderChange("15")}
+              />
+           }
             label="15 Minutes Before"
           />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={reminders["30"]}
-                onChange={handleReminderChange("30")}
+      <FormControlLabel
+          control={
+            <Checkbox
+              checked={reminders["30"]}
+              onChange={handleReminderChange("30")}
               />
             }
             label="30 Minutes Before"
           />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={reminders["60"]}
-                onChange={handleReminderChange("60")}
+       <FormControlLabel
+          control={
+            <Checkbox
+              checked={reminders["60"]}
+              onChange={handleReminderChange("60")}
               />
             }
             label="1 Hour Before"
           />
         </FormGroup>
-      </DialogContent>
-      <Button variant="outlined" onClick={handleSaveEvent}>
+
+
+        </DialogContent>
+       
+        <Button variant="outlined" onClick={handleSaveEvent}>
         Save Event
       </Button>
-    </Dialog>
+     
+</Dialog>    
+
   );
 }
