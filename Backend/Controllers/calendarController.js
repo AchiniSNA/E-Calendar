@@ -5,9 +5,9 @@ const createCalendar = async (req, res) => {
   console.log("creating new calendar", req.body);
   //validate request
   if (!req.body) {
-    res.status(400).json({
-      message: "content can not be empty",
-    });
+    res
+      .status(400)
+      .json({ success: false, message: "content can not be empty" });
   }
   const calendaId = uuidv4();
   //create a new event
@@ -19,7 +19,7 @@ const createCalendar = async (req, res) => {
     name: req.body.name,
   });
   await calendar.save();
-  res.send(calendar);
+  res.status(200).json({ success: true, calendar , calendar_id:calendaId});
 };
 
 const getCalendar = async (req, res) => {
@@ -44,17 +44,18 @@ const deleteCalendar = async (req, res) => {
   const calendarId = req.params.calendar_id;
   try {
     // Find and delete the appointment by its appointment_id
+    const calendarData = await Calendar.find({ calendar_id: calendarId });
     const deletedCalendar = await Calendar.findOneAndDelete({
       calendar_id: calendarId,
     });
     if (!deletedCalendar) {
-      return res.status(404).json({ message: "calendar not found" });
+      return res.status(404).json({success:false,  message: "calendar not found" });
     }
 
-    return res.json({ message: "Calandar deleted successfully" });
+    return res.status(200).json({success:true,  data: calendarData, message: "Calandar deleted successfully" });
   } catch (error) {
     console.error("Error deleting Calandar:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({success: false,  message: "Internal Server Error" });
   }
 };
 
