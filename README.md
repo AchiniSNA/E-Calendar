@@ -21,7 +21,7 @@ Follow these steps to set up and run the application:
 ```git clone https://github.com/AchiniSNA/calendar.git```
 
 ## Navigate to the project directory
-```cd BOC_E_Calender```
+```cd E_Calender```
 
 ## Mobile Frontend
 ### Naviagte to the mobile frontend directory
